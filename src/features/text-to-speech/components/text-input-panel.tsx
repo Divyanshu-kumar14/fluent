@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useStore } from "@tanstack/react-form";
 import { Coins } from "lucide-react";
 
@@ -17,10 +16,7 @@ import {
     ttsFormOptions } 
     from "./text-to-speech-form";
 
-import { 
-    GenerateButton } 
-    from "./generate-buttton";
-import { Field } from "@base-ui/react";
+import { GenerateButton } from "@/features/text-to-speech/components/generate-button";
 
 export function TextInputPanel() {
     
@@ -28,7 +24,7 @@ export function TextInputPanel() {
 
     const text = useStore(form.store, (s) => s.values.text);
     const isSubmitting = useStore(form.store, (s) => s.isSubmitting);
-    const isValid = useStore(form.store, (s) => s.isValid);
+    const isValid = useStore(form.store, (s) => s.isValid); 
     
     return (
         <div className="flex h-full min-h-0 flex-col flex-1">
