@@ -29,6 +29,8 @@ import type {
     AppRouter 
 } from './routers/_app';
 
+import superjson from "superjson";
+
 export const { 
     TRPCProvider, 
     useTRPC 
@@ -72,7 +74,7 @@ export function TRPCReactProvider(
     createTRPCClient<AppRouter>({
       links: [
         httpBatchLink({
-          // transformer: superjson, <-- if you use a data transformer
+          transformer: superjson,
           url: getUrl(),
         }),
       ],
