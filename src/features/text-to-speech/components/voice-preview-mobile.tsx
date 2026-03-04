@@ -12,6 +12,7 @@ import { Pause, Play, Download } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { VoiceAvatar } from "@/components/voice-avatar/voice-avatar";
+import { downloadAudioFile } from "../utils/download-audio";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 type VoicePreviewMobileVoice = {
@@ -80,20 +81,7 @@ export function VoicePreviewMobile({
 
   /** Trigger a download of the audio file with a sanitised filename. */
   const handleDownload = () => {
-    const safeName =
-      text
-        .slice(0, 50)
-        .trim()
-        .replace(/[^a-zA-Z0-9]+/g, "-")
-        .replace(/^-|-$/g, "")
-        .toLowerCase() || "speech";
-
-    const link = document.createElement("a");
-    link.href = audioUrl;
-    link.download = `${safeName}.wav`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    downloadAudioFile(audioUrl, text);
   };
 
   if (!audioUrl) return null;

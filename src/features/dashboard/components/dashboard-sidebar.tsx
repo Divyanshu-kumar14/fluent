@@ -47,7 +47,7 @@ import Link from "next/link";
 // import { UsageContainer } from "@/features/billing/components/usage-container";
 // import { VoiceCreateDialog } from "@/features/voices/components/voice-create-dialog";
 
-import { useState } from "react";
+
 
 /** Shape of a single navigation menu item. */
 interface MenuItem {
@@ -113,7 +113,7 @@ function NavSection({ label, items, pathname }: NavSectionProps) {
 export function DashboardSidebar() {
   const pathname = usePathname();
   const clerk = useClerk();
-  const [voiceDialogOpen, setVoiceDialogOpen] = useState(false);
+
 
   // ── Primary navigation items ──
   const mainMenuItems: MenuItem[] = [
@@ -135,7 +135,6 @@ export function DashboardSidebar() {
     {
       title: "Voice cloning",
       icon: Volume2,
-      onClick: () => setVoiceDialogOpen(true),
     },
   ];
 

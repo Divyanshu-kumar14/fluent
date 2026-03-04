@@ -14,7 +14,6 @@
 
 import { useState } from "react";
 import { Pause, Play, Download, Redo, Undo } from "lucide-react";
-import { format } from "date-fns";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,16 +22,19 @@ import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 import { useWaveSurfer } from "../hooks/use-wavesurfer";
+import { downloadAudioFile } from "../utils/download-audio";
 
 type VoicePreviewPanelVoice = {
   id?: string;
   name: string;
 };
 
-/** Format seconds into mm:ss using date-fns. */
+/** Format seconds into mm:ss. */
 function formatTime(seconds: number): string {
-  return format(new Date(seconds * 1000), "mm:ss");
-};
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+}
 
 export function VoicePreviewPanel({
   audioUrl,
@@ -65,24 +67,7 @@ export function VoicePreviewPanel({
   /** Download the audio file with a sanitised filename derived from the text. */
   const handleDownload = () => {
     setIsDownloading(true);
-
-    // Create a safe filename from the first 50 chars of the text
-    const safeName =
-      text
-        .slice(0, 50)
-        .trim()
-        .replace(/[^a-zA-Z0-9]+/g, "-")
-        .replace(/^-|-$/g, "")
-        .toLowerCase() || "speech";
-
-    // Trigger a download via a temporary <a> element
-    const link = document.createElement("a");
-    link.href = audioUrl;
-    link.download = `${safeName}.wav`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
+    downloadAudioFile(audioUrl, text);
     setTimeout(() => setIsDownloading(false), 1000);
   };
 

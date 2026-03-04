@@ -49,6 +49,13 @@ export function useWaveSurfer({
   const wavesurferRef = useRef<WaveSurfer | null>(null);
   const isMobile = useIsMobile();
 
+  // Store callbacks in refs so changes don't trigger effect re-runs
+  const onReadyRef = useRef(onReady);
+  const onErrorRef = useRef(onError);
+
+  useEffect(() => { onReadyRef.current = onReady; }, [onReady]);
+  useEffect(() => { onErrorRef.current = onError; }, [onError]);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -91,7 +98,7 @@ export function useWaveSurfer({
 
       // Catch NotAllowedError when browser blocks autoplay without user interaction
       if (autoplay) ws.play().catch(() => {});
-      onReady?.();
+      onReadyRef.current?.();
     });
 
     ws.on("play", () => setIsPlaying(true));
@@ -102,14 +109,14 @@ export function useWaveSurfer({
     ws.on("error", (error) => {
       if (destroyed) return;
       console.error("WaveSurfer error:", error);
-      onError?.(new Error(String(error)));
+      onErrorRef.current?.(new Error(String(error)));
     });
 
     // Load the audio URL
     ws.load(url).catch((error) => {
       if (destroyed) return;
       console.error("WaveSurfer load error:", error);
-      onError?.(new Error(String(error)));
+      onErrorRef.current?.(new Error(String(error)));
     });
 
     // ── Cleanup ──
@@ -117,7 +124,7 @@ export function useWaveSurfer({
       destroyed = true;
       ws.destroy();
     };
-  }, [url, autoplay, onReady, onError, isMobile]);
+  }, [url, autoplay, isMobile]);
 
   /** Toggle between play and pause. */
   const togglePlayPause = useCallback(() => {
@@ -128,18 +135,22 @@ export function useWaveSurfer({
   const seekForward = useCallback((seconds = 5) => {
     const ws = wavesurferRef.current;
     if (!ws) return;
+    const dur = ws.getDuration();
+    if (dur <= 0) return;
 
-    const newTime = Math.min(ws.getCurrentTime() + seconds, ws.getDuration());
-    ws.seekTo(newTime / ws.getDuration());
+    const newTime = Math.min(ws.getCurrentTime() + seconds, dur);
+    ws.seekTo(newTime / dur);
   }, []);
 
   /** Seek backward by the given number of seconds (default: 5). */
   const seekBackward = useCallback((seconds = 5) => {
     const ws = wavesurferRef.current;
     if (!ws) return;
+    const dur = ws.getDuration();
+    if (dur <= 0) return;
 
     const newTime = Math.max(ws.getCurrentTime() - seconds, 0);
-    ws.seekTo(newTime / ws.getDuration());
+    ws.seekTo(newTime / dur);
   }, []);
 
   return {
