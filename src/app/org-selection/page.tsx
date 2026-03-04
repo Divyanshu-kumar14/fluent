@@ -1,3 +1,11 @@
+/**
+ * Organisation Selection Page
+ *
+ * Shown when a signed-in user has no active Clerk organisation.
+ * Renders the Clerk OrganizationList component to let them create
+ * or select an organisation before accessing the dashboard.
+ */
+
 import { OrganizationList } from "@clerk/nextjs";
 
 export default function OrgSelectionPage() {

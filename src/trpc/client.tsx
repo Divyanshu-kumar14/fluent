@@ -1,5 +1,14 @@
+/**
+ * tRPC Client-Side Provider
+ *
+ * Sets up the tRPC + React Query provider tree for client components.
+ * Key responsibilities:
+ *   - Creates a singleton QueryClient (browser) or per-request one (server).
+ *   - Creates a tRPC client with httpBatchLink for efficient request batching.
+ *   - Wraps the app in QueryClientProvider + TRPCProvider.
+ */
 'use client';
-// ^-- to make sure we can mount the Provider from a server component
+
 import type { 
     QueryClient 
 } from '@tanstack/react-query';
@@ -31,13 +40,20 @@ import type {
 
 import superjson from "superjson";
 
+/** Typed tRPC hooks and provider for the AppRouter. */
 export const { 
     TRPCProvider, 
     useTRPC 
 } = createTRPCContext<AppRouter>();
 
+/** Singleton query client for the browser (survives re-renders). */
 let browserQueryClient: QueryClient;
 
+/**
+ * Returns a QueryClient instance.
+ * - Server: always creates a fresh client (each request is isolated).
+ * - Browser: reuses a singleton to avoid losing cache during React suspense.
+ */
 function getQueryClient() {
   if (typeof window === 'undefined') {
     // Server: always make a new query client
@@ -51,6 +67,7 @@ function getQueryClient() {
   return browserQueryClient;
 }
 
+/** Resolve the tRPC API URL (relative on client, absolute on server). */
 function getUrl() {
   const base = (() => {
     if (typeof window !== 'undefined') return '';
@@ -60,6 +77,10 @@ function getUrl() {
   return `${base}/api/trpc`;
 }
 
+/**
+ * Top-level provider component that wires up tRPC + React Query.
+ * Mount this in the root layout so all client components can use `useTRPC`.
+ */
 export function TRPCReactProvider(
   props: Readonly<{
     children: React.ReactNode;

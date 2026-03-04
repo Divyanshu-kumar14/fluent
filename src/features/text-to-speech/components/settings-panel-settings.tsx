@@ -1,3 +1,10 @@
+/**
+ * Settings Panel — Settings Tab Content
+ *
+ * Renders the voice selector dropdown and TTS parameter sliders
+ * (Creativity, Voice Variety, Expression Range, Natural Flow).
+ * All fields are wired to the TTS form via TanStack Form context.
+ */
 "use client";
 
 import { useStore } from "@tanstack/react-form";
@@ -16,12 +23,12 @@ export function SettingsPanelSettings() {
 
   return (
     <>
-      {/* Voice Style Dropdown Section */}
+      {/* Voice selector dropdown section */}
       <div className="border-b border-dashed p-4">
         <VoiceSelector />
       </div>
 
-      {/* Voice Adjustments Section */}
+      {/* TTS parameter sliders section */}
       <div className="p-4 flex-1">
         <FieldGroup className="gap-8">
           {sliders.map((slider) => (
@@ -29,6 +36,7 @@ export function SettingsPanelSettings() {
               {(field) => (
                 <Field>
                   <FieldLabel>{slider.label}</FieldLabel>
+                  {/* Range labels (e.g. "Consistent" ↔ "Expressive") */}
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">
                       {slider.leftLabel}

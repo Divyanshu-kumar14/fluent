@@ -1,3 +1,14 @@
+/**
+ * TTS Text Input Panel Component
+ *
+ * The main text input area for the TTS editor page.
+ * Wired to the TTS form via TanStack Form context.
+ *
+ * Features:
+ *   - Full-height textarea with a fade-to-transparent bottom overlay.
+ *   - Responsive action bar: full-width button on mobile, inline on desktop.
+ *   - Cost estimate badge and character counter (desktop only, shown when typing).
+ */
 "use client";
 
 import { useStore } from "@tanstack/react-form";
@@ -22,13 +33,14 @@ export function TextInputPanel() {
     
     const form = useTypedAppFormContext(ttsFormOptions);
 
+    // Subscribe to relevant form state slices for reactivity
     const text = useStore(form.store, (s) => s.values.text);
     const isSubmitting = useStore(form.store, (s) => s.isSubmitting);
     const isValid = useStore(form.store, (s) => s.isValid); 
     
     return (
         <div className="flex h-full min-h-0 flex-col flex-1">
-            {/* Text Input Area */}
+            {/* Text Input Area — absolutely positioned to fill the flex container */}
             <div className="relative min-h-0 flex-1">
                 <form.Field name="text">
                     {(field) => (
@@ -42,13 +54,14 @@ export function TextInputPanel() {
                 />
                 )}
                 </form.Field>
-                {/* Bottom fade overlay */}
+                {/* Bottom fade overlay — prevents text from touching the action bar */}
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-linear-to-t from-background to-transparent" 
                 />
             </div>
+
             {/* Action bar */}
             <div className="shrink-0 p-4 lg:p-6">
-                {/* Mobile layout */}
+                {/* Mobile layout: full-width generate button */}
                 <div className="flex flex-col gap-3 lg:hidden">
                     <GenerateButton 
                         className="w-full"
@@ -57,9 +70,11 @@ export function TextInputPanel() {
                         onSubmit={() => form.handleSubmit()}
                     />
                 </div>
-                {/* Desktop Layout */}
+
+                {/* Desktop layout: cost estimate + counter + inline generate button */}
                 {text.length > 0 ? (
                     <div className="hidden items-center justify-between lg:flex">
+                        {/* Cost estimate badge */}
                         <Badge variant="outline" className="gap-1.5 border-dashed">
                             <Coins className="size-3 text-chart-5" />
                             <span className="text-xs">
@@ -70,6 +85,7 @@ export function TextInputPanel() {
                             </span>
                         </Badge>
                         <div className="flex items-center gap-3">
+                            {/* Character counter */}
                             <p className="text-xs tracking-tight">
                                 {text.length.toLocaleString()} / 
                                 <span className="text-muted-foreground">

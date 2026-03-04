@@ -1,3 +1,14 @@
+/**
+ * Voice Selector Component
+ *
+ * A dropdown select for choosing a TTS voice, integrated with the TTS form context.
+ * Groups voices into:
+ *   - Selected Voice (shown if the current voice ID doesn't match any available voice)
+ *   - Team Voices (custom org-uploaded voices)
+ *   - Built-in Voices (system-wide voices)
+ *
+ * Each option shows a DiceBear avatar and the voice name + category label.
+ */
 "use client";
 
 import { useStore } from "@tanstack/react-form";
@@ -34,8 +45,12 @@ export function VoiceSelector() {
   const voiceId = useStore(form.store, (s) => s.values.voiceId);
   const isSubmitting = useStore(form.store, (s) => s.isSubmitting);
 
+  // Find the currently selected voice in the available list
   const selectedVoice = voices.find((v) => v.id === voiceId);
+  // If voiceId is set but not in the list, the voice was likely deleted
   const hasMissingSelectedVoice = Boolean(voiceId) && !selectedVoice;
+
+  // Resolve the display voice (selected, missing/unavailable, or first available)
   const currentVoice = selectedVoice
     ? selectedVoice
     : hasMissingSelectedVoice
@@ -54,6 +69,7 @@ export function VoiceSelector() {
         onValueChange={(v) => form.setFieldValue("voiceId", v)}
         disabled={isSubmitting}
       >
+        {/* Trigger — shows the currently selected voice */}
         <SelectTrigger className="w-full h-auto gap-1 rounded-lg bg-white px-2 py-1">
           <SelectValue>
             {currentVoice && (
@@ -72,7 +88,10 @@ export function VoiceSelector() {
             )}
           </SelectValue>
         </SelectTrigger>
+
+        {/* Dropdown content — grouped by voice type */}
         <SelectContent>
+          {/* Show the "unavailable" voice at the top if the ID doesn't match */}
           {hasMissingSelectedVoice && currentVoice && (
             <>
               <SelectGroup>
@@ -94,6 +113,8 @@ export function VoiceSelector() {
               )}
             </>
           )}
+
+          {/* Team Voices — custom voices uploaded by the org */}
           {customVoices.length > 0 && (
             <SelectGroup>
               <SelectLabel>Team Voices</SelectLabel>
@@ -107,9 +128,13 @@ export function VoiceSelector() {
               ))}
             </SelectGroup>
           )}
+
+          {/* Separator between custom and system voices */}
           {customVoices.length > 0 && systemVoices.length > 0 && (
             <SelectSeparator />
           )}
+
+          {/* Built-in Voices — platform-wide system voices */}
           {systemVoices.length > 0 && (
             <SelectGroup>
               <SelectLabel>Built-in Voices</SelectLabel>

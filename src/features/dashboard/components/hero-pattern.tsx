@@ -1,3 +1,11 @@
+/**
+ * Hero Pattern Component
+ *
+ * Renders a decorative animated wavy background behind the dashboard header.
+ * Only visible on desktop (lg+) — hidden on mobile to save rendering cost.
+ * Uses pointer-events-none so it doesn't interfere with interactive elements.
+ */
+
 import { WavyBackground } from "@/components/ui/wavy-background";
 
 export function HeroPattern() {

@@ -1,3 +1,11 @@
+/**
+ * Voice Preview Placeholder Component
+ *
+ * Shown on the TTS page before the user has generated any audio.
+ * Displays a decorative icon stack and a message prompting the user
+ * to generate their first TTS output.
+ */
+
 import { AudioLines, BookOpen, Sparkles, Volume2 } from "lucide-react";
 import Link from "next/link";
 
@@ -7,6 +15,7 @@ export function VoicePreviewPlaceholder() {
   return (
     <div className="hidden flex-1 lg:flex h-full flex-col items-center justify-center gap-6 border-t">
       <div className="flex flex-col items-center gap-3">
+        {/* Decorative icon stack */}
         <div className="relative flex w-32 items-center justify-center">
           
           <div className="absolute left-0 -rotate-30 rounded-full bg-muted p-4">
@@ -30,6 +39,8 @@ export function VoicePreviewPlaceholder() {
           Once you generate, your audio result will appear here. Sit back and relax.
         </p>
       </div>
+
+      {/* Help CTA */}
       <Link href="/">
         <Button variant="outline" size="sm">
           <BookOpen />

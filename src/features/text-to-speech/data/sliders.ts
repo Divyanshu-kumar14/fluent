@@ -1,7 +1,23 @@
+/**
+ * TTS Parameter Slider Definitions
+ *
+ * Defines the configuration for each slider in the Settings panel.
+ * Each slider controls a TTS model parameter with user-friendly labels:
+ *   - Creativity (temperature)
+ *   - Voice Variety (topP)
+ *   - Expression Range (topK)
+ *   - Natural Flow (repetitionPenalty)
+ */
+
+/** Shape of a single slider configuration. */
 interface Slider {
+  /** Matches the corresponding TTS form field name. */
   id: "temperature" | "topP" | "topK" | "repetitionPenalty";
+  /** User-facing label displayed above the slider. */
   label: string;
+  /** Left-side label (low end of the slider). */
   leftLabel: string;
+  /** Right-side label (high end of the slider). */
   rightLabel: string;
   min: number;
   max: number;

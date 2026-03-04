@@ -1,27 +1,42 @@
+/**
+ * tRPC Initialisation & Procedure Definitions
+ *
+ * Sets up the core tRPC infrastructure:
+ *   - `createTRPCContext`: empty context factory (cached per request).
+ *   - `baseProcedure`: unprotected procedure for public endpoints.
+ *   - `authProcedure`: requires a signed-in Clerk user.
+ *   - `orgProcedure`: requires both a signed-in user AND an active org.
+ */
+
 import { initTRPC } from '@trpc/server';
 import { TRPCError } from '@trpc/server';
 import { cache } from 'react';
 import { auth } from '@clerk/nextjs/server';
 import superjson from "superjson";
 
+/** Cached context factory — returns an empty context for each request. */
 export const createTRPCContext = cache(async () => {
   return {};
 });
-// Avoid exporting the entire t-object
-// since it's not very descriptive.
-// For instance, the use of a t variable
-// is common in i18n libraries.
+
+// Initialise tRPC with superjson for rich serialisation (Dates, Maps, etc.)
+// Note: avoid exporting the full `t` object — its name clashes with i18n libs.
 const t = initTRPC.create({
   /**
    * @see https://trpc.io/docs/server/data-transformers
    */
   transformer: superjson,
 });
-// Base router and procedure helpers
+
+// ── Exported helpers ───────────────────────────────────
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
 export const baseProcedure = t.procedure;
 
+/**
+ * Auth-protected procedure.
+ * Injects `ctx.userId` after verifying the Clerk session.
+ */
 export const authProcedure = t.procedure.use(async ({ next }) => {
   const { userId } = await auth();
 
@@ -36,6 +51,11 @@ export const authProcedure = t.procedure.use(async ({ next }) => {
   });
 });
 
+/**
+ * Organisation-scoped procedure.
+ * Extends authProcedure — also requires an active Clerk organisation.
+ * Injects both `ctx.userId` and `ctx.orgId`.
+ */
 export const orgProcedure = t.procedure.use(async ({ next }) => {
   const { userId, orgId } = await auth();
 

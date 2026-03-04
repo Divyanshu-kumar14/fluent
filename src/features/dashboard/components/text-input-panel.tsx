@@ -1,3 +1,13 @@
+/**
+ * Dashboard Text Input Panel Component
+ *
+ * A simplified text input on the dashboard home page that lets users
+ * type or paste text, see an estimated cost, and navigate to the
+ * full TTS page with the text pre-filled as a query parameter.
+ *
+ * Unlike the TTS page's TextInputPanel, this one doesn't use a form —
+ * it just redirects to /text-to-speech?text=<encoded text>.
+ */
 "use client";
 
 import { useState } from "react";
@@ -13,6 +23,7 @@ export function TextInputPanel() {
   const [text, setText] = useState("");
   const router = useRouter();
 
+  /** Navigate to the TTS page with the current text pre-filled. */
   const handleGenerate = () => {
     const trimmed = text.trim();
     if (!trimmed) return;
@@ -36,8 +47,7 @@ export function TextInputPanel() {
             maxLength={TEXT_MAX_LENGTH}
           />
 
-          {/* Bottom info */}
-
+          {/* Cost estimate and character counter */}
           <div className="flex items-center justify-between">
             <Badge variant="outline" className="gap-1.5 border-dashed">
               <Coins className="size-3 text-chart-5" />
@@ -60,8 +70,7 @@ export function TextInputPanel() {
           </div>
         </div>
 
-        {/* Action bar */}
-
+        {/* Generate CTA */}
         <div className="flex items-center justify-end p-3">
           <Button
             size="sm"

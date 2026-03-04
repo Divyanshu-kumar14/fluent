@@ -1,3 +1,10 @@
+/**
+ * Page Header Component
+ *
+ * Shared page header used across dashboard sub-pages.
+ * Renders the sidebar toggle, page title, and action buttons (Feedback, Help).
+ */
+
 import { Headphones, ThumbsUp } from "lucide-react";
 import Link from "next/link";
 
@@ -19,10 +26,13 @@ export function PageHeader({
         className,
       )}
     >
+      {/* Left side: sidebar toggle + page title */}
       <div className="flex items-center gap-2">
         <SidebarTrigger />
         <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
       </div>
+
+      {/* Right side: action buttons */}
       <div className="flex items-center gap-3">
          <Button variant="outline" size="sm" asChild>
             <Link href="/">

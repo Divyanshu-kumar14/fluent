@@ -1,3 +1,10 @@
+/**
+ * Dashboard Layout
+ *
+ * Wraps all dashboard pages with the collapsible sidebar and main content area.
+ * Reads the sidebar state from cookies to preserve the user's collapse preference.
+ */
+
 import { cookies } from "next/headers";
 
 import { 
@@ -11,6 +18,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Restore sidebar open/closed state from a cookie
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
