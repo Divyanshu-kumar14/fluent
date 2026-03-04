@@ -1,3 +1,14 @@
+/**
+ * Dashboard Sidebar Component
+ *
+ * The main navigation sidebar for the entire dashboard. Contains:
+ *   - App logo and org switcher (header)
+ *   - Main menu items (Dashboard, Explore voices, TTS, Voice cloning)
+ *   - Others menu (Settings, Help)
+ *   - User button (footer)
+ *
+ * The sidebar is collapsible and supports both icon-only and full-width modes.
+ */
 "use client";
 
 import Image from "next/image";
@@ -38,19 +49,22 @@ import Link from "next/link";
 
 import { useState } from "react";
 
+/** Shape of a single navigation menu item. */
 interface MenuItem {
   title: string;
-  url?: string;
+  url?: string;          // If set, renders as a link; otherwise as a button
   icon: LucideIcon;
-  onClick?: () => void;
+  onClick?: () => void;  // Used for actions like opening dialogs
 };
 
+/** Props for a labelled group of navigation items. */
 interface NavSectionProps {
   label?: string;
   items: MenuItem[];
-  pathname: string;
+  pathname: string;      // Current route path (for active-state highlighting)
 };
 
+/** Renders a group of sidebar menu items with optional label. */
 function NavSection({ label, items, pathname }: NavSectionProps) {
   return (
     <SidebarGroup>
@@ -68,8 +82,8 @@ function NavSection({ label, items, pathname }: NavSectionProps) {
                 isActive={
                   item.url
                     ? item.url === "/"
-                      ? pathname === "/"
-                      : pathname.startsWith(item.url)
+                      ? pathname === "/"             // Exact match for dashboard root
+                      : pathname.startsWith(item.url) // Prefix match for sub-routes
                     : false
                 }
                 onClick={item.onClick}
@@ -101,6 +115,7 @@ export function DashboardSidebar() {
   const clerk = useClerk();
   const [voiceDialogOpen, setVoiceDialogOpen] = useState(false);
 
+  // ── Primary navigation items ──
   const mainMenuItems: MenuItem[] = [
     {
       title: "Dashboard",
@@ -124,6 +139,7 @@ export function DashboardSidebar() {
     },
   ];
 
+  // ── Secondary navigation items ──
   const othersMenuItems: MenuItem[] = [
     {
       title: "Settings",
@@ -144,6 +160,7 @@ export function DashboardSidebar() {
       onOpenChange={setVoiceDialogOpen}
     /> */}
     <Sidebar collapsible="icon">
+      {/* ── Header: logo + org switcher ── */}
       <SidebarHeader className="flex flex-col gap-4 pt-4">
         <div 
         className="flex items-center gap-2 pl-1 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:pl-0">
@@ -187,7 +204,10 @@ export function DashboardSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+
       <div className="border-b border-dashed border-border" />
+
+      {/* ── Content: navigation groups ── */}
       <SidebarContent>
         <NavSection items={mainMenuItems} pathname={pathname} />
         <NavSection
@@ -196,7 +216,10 @@ export function DashboardSidebar() {
           pathname={pathname}
         />
       </SidebarContent>
+
       <div className="border-b border-dashed border-border" />
+
+      {/* ── Footer: user button ── */}
       <SidebarFooter className="gap-3 py-3">
         {/* <UsageContainer /> */}
         <SidebarMenu>

@@ -1,3 +1,15 @@
+/**
+ * Text-to-Speech View — New Generation
+ *
+ * The main view for the /text-to-speech page (creating a new generation).
+ * Fetches the available voices via tRPC, resolves initial form values
+ * (from URL search params or defaults), and renders:
+ *   - TextInputPanel (textarea + generate button)
+ *   - VoicePreviewPlaceholder (shown before generation)
+ *   - SettingsPanel (voice selector + parameter sliders, desktop sidebar)
+ *
+ * All wrapped in TTSVoicesProvider and TextToSpeechForm for shared context.
+ */
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -19,6 +31,7 @@ export function TextToSpeechView({
   initialValues?: Partial<TTSFormValues>;
 }) {
   const trpc = useTRPC();
+  // Fetch voices (already prefetched on the server — this reads from cache)
   const { 
     data: voices,
   } = useSuspenseQuery(trpc.voices.getAll.queryOptions());
@@ -45,10 +58,12 @@ export function TextToSpeechView({
     <TTSVoicesProvider value={{ customVoices, systemVoices, allVoices }}>
       <TextToSpeechForm defaultValues={defaultValues}>
         <div className="flex min-h-0 flex-1 overflow-hidden">
+          {/* Left: text input + placeholder preview */}
           <div className="flex min-h-0 flex-1 flex-col">
             <TextInputPanel />
             <VoicePreviewPlaceholder />
           </div>
+          {/* Right: settings sidebar (desktop only) */}
           <SettingsPanel />
         </div>
       </TextToSpeechForm>

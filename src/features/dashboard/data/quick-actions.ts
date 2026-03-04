@@ -1,7 +1,18 @@
+/**
+ * Quick Actions Data
+ *
+ * Static list of quick-action cards displayed on the dashboard.
+ * Each action pre-fills the TTS page with a sample text snippet
+ * so users can try different use-cases (story, ad, podcast, etc.).
+ */
+
+/** Shape of a single quick-action card. */
 export interface QuickAction {
   title: string;
   description: string;
+  /** Tailwind gradient classes for the card thumbnail. */
   gradient: string;
+  /** Link to the TTS page with pre-filled text via query param. */
   href: string;
 };
 

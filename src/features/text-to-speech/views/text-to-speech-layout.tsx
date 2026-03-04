@@ -1,3 +1,10 @@
+/**
+ * Text-to-Speech Layout View
+ *
+ * Shared layout wrapper for all /text-to-speech routes.
+ * Adds the PageHeader and a flex container that child pages fill.
+ */
+
 import { PageHeader } from "@/components/page-header";
 
 export function TextToSpeechLayout({

@@ -1,3 +1,9 @@
+/**
+ * Generate Button Component
+ *
+ * A shared CTA button used in the TTS text input panel.
+ * Shows a spinner and "Generating..." text while a generation is in progress.
+ */
 "use client";
 
 import { Button } from "@/components/ui/button";
