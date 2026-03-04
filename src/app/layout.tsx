@@ -49,16 +49,16 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <TRPCReactProvider>
       <html lang="en">
         <body
           className={`${inter.variable} ${geistMono.variable} antialiased`}
         >
-          {children}
-          <Toaster />
+          <TRPCReactProvider>
+            {children}
+            <Toaster />
+          </TRPCReactProvider>
         </body>
       </html>
-      </TRPCReactProvider>
     </ClerkProvider>
   );
 }

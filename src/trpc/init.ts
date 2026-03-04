@@ -56,12 +56,8 @@ export const authProcedure = t.procedure.use(async ({ next }) => {
  * Extends authProcedure — also requires an active Clerk organisation.
  * Injects both `ctx.userId` and `ctx.orgId`.
  */
-export const orgProcedure = t.procedure.use(async ({ next }) => {
-  const { userId, orgId } = await auth();
-
-  if (!userId) {
-    throw new TRPCError({ code: 'UNAUTHORIZED' });
-  }
+export const orgProcedure = authProcedure.use(async ({ next, ctx }) => {
+  const { orgId } = await auth();
 
   if (!orgId) {
     throw new TRPCError({ 
@@ -72,7 +68,7 @@ export const orgProcedure = t.procedure.use(async ({ next }) => {
 
   return next({
     ctx: {
-      userId,
+      ...ctx,
       orgId,
     },
   });

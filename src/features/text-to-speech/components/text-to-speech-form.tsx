@@ -97,18 +97,7 @@ export function TextToSpeechForm({
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Failed to generate audio";
-
-        // (Disabled) Subscription check — redirect to checkout if needed
-        // if (message === "SUBSCRIPTION_REQUIRED") {
-        //   toast.error("Subscription required", {
-        //     action: {
-        //       label: "Subscribe",
-        //       onClick: () => checkout(),
-        //     },
-        //   });
-        // } else {
-        //   toast.error(message);
-        // }
+        toast.error(message);
       }
     },
   });
