@@ -22,6 +22,7 @@ export default async function TextToSpeechPage({
 
   // Prefetch voices on the server so the client gets cached data instantly
   prefetch(trpc.voices.getAll.queryOptions());
+  prefetch(trpc.generations.getAll.queryOptions());
 
   return (
     <HydrateClient>

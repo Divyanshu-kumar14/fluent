@@ -70,7 +70,7 @@ export function VoiceSelector() {
         disabled={isSubmitting}
       >
         {/* Trigger — shows the currently selected voice */}
-        <SelectTrigger className="w-full h-auto gap-1 rounded-lg bg-white px-2 py-1">
+        <SelectTrigger className="w-full h-auto gap-1 rounded-lg bg-background px-2 py-1">
           <SelectValue>
             {currentVoice && (
               <>

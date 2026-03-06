@@ -26,7 +26,7 @@ export function VoicePreviewPlaceholder() {
             <Sparkles className="size-5 text-background" />
           </div>
 
-          <div className="absolute right-0 -rotate-30 rounded-full bg-muted p-4">
+          <div className="absolute right-0 rotate-30 rounded-full bg-muted p-4">
             <AudioLines className="size-5 text-muted-foreground" />
           </div>
 
