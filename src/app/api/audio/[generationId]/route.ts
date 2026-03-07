@@ -11,8 +11,8 @@
  */
 
 import { auth } from "@clerk/nextjs/server";
-import { prisma } from "@/lib/db";
 import { getSignedAudioUrl } from "@/lib/r2";
+import { GenerationService } from "@/features/text-to-speech/services/generation.service";
 
 export async function GET(
   _request: Request,
@@ -28,9 +28,7 @@ export async function GET(
   const { generationId } = await params;
 
   // Look up the generation scoped to the user's org
-  const generation = await prisma.generation.findUnique({
-    where: { id: generationId, orgId },
-  });
+  const generation = await GenerationService.getById(generationId, orgId);
 
   if (!generation) {
     return new Response("Not found", { status: 404 });

@@ -1,6 +1,6 @@
 "use client";
 
-import { VoiceAvatar } from "@/components/voice-avatar/voice-avatar";
+import { VoiceAvatar } from "@/features/voices/components/voice-avatar/voice-avatar";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";

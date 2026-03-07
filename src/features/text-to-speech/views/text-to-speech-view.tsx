@@ -16,8 +16,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { useTRPC } from "@/trpc/client";
 import { TextInputPanel } from "@/features/text-to-speech/components/text-input-panel";
-import { VoicePreviewPlaceholder } from "@/features/text-to-speech/components/voice-preview-placeholder";
-import { SettingsPanel } from "@/features/text-to-speech/components/settings-panel";
+import { VoicePreviewPlaceholder } from "../components/voices/voice-preview-placeholder";
+import { SettingsPanel } from "../components/settings/settings-panel";
 import {
   TextToSpeechForm,
   defaultTTSValues,
@@ -61,10 +61,14 @@ export function TextToSpeechView({
           {/* Left: text input + placeholder preview */}
           <div className="flex min-h-0 flex-1 flex-col">
             <TextInputPanel />
-            <VoicePreviewPlaceholder />
+            <div className="fade-on-focus flex-1 min-h-0 flex flex-col">
+              <VoicePreviewPlaceholder />
+            </div>
           </div>
           {/* Right: settings sidebar (desktop only) */}
-          <SettingsPanel />
+          <div className="fade-on-focus h-full">
+            <SettingsPanel />
+          </div>
         </div>
       </TextToSpeechForm>
     </TTSVoicesProvider>

@@ -9,10 +9,10 @@
  *   - QuickActionsPanel (sample TTS use-case cards)
  */
 
-import { PageHeader } from "@/components/page-header";
+import { PageHeader } from "@/components/layout/page-header";
 import { HeroPattern } from "@/features/dashboard/components/hero-pattern";
 import { DashboardHeader } from "@/features/dashboard/components/dashboard-header";
-import { TextInputPanel } from "@/features/dashboard/components/text-input-panel";
+import { TextInputPanel } from "../components/dashboard-text-input";
 import { QuickActionsPanel } from "@/features/dashboard/components/quick-actions-panel";
 
 export function DashboardView() {

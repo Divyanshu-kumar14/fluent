@@ -5,7 +5,7 @@
  * Adds the PageHeader and a flex container that child pages fill.
  */
 
-import { PageHeader } from "@/components/page-header";
+import { PageHeader } from "@/components/layout/page-header";
 
 export function TextToSpeechLayout({
   children,

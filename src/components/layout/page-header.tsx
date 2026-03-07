@@ -10,6 +10,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { cn } from "@/lib/utils";
 
 export function PageHeader({
@@ -34,6 +35,7 @@ export function PageHeader({
 
       {/* Right side: action buttons */}
       <div className="flex items-center gap-3">
+         <ThemeToggle />
          <Button variant="outline" size="sm" asChild>
             <Link href="/">
               <ThumbsUp />

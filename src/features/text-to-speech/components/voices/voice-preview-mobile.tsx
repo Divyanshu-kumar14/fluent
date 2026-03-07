@@ -10,9 +10,10 @@
 import { useRef, useState, useEffect } from "react";
 import { Pause, Play, Download } from "lucide-react";
 
+
 import { Button } from "@/components/ui/button";
-import { VoiceAvatar } from "@/components/voice-avatar/voice-avatar";
-import { downloadAudioFile } from "../utils/download-audio";
+import { VoiceAvatar } from "@/features/voices/components/voice-avatar/voice-avatar";
+import { downloadAudioFile } from "../../utils/download-audio";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 type VoicePreviewMobileVoice = {
@@ -80,8 +81,8 @@ export function VoicePreviewMobile({
   };
 
   /** Trigger a download of the audio file with a sanitised filename. */
-  const handleDownload = () => {
-    downloadAudioFile(audioUrl, text);
+  const handleDownload = async () => {
+    await downloadAudioFile(audioUrl, text);
   };
 
   if (!audioUrl) return null;

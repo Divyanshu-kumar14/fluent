@@ -7,6 +7,8 @@
  */
 "use client";
 
+
+
 import { useStore } from "@tanstack/react-form";
 
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
@@ -15,7 +17,7 @@ import { useTypedAppFormContext } from "@/hooks/use-app-form";
 
 import { sliders } from "@/features/text-to-speech/data/sliders";
 import { ttsFormOptions } from "@/features/text-to-speech/components/text-to-speech-form";
-import { VoiceSelector } from "@/features/text-to-speech/components/voice-selector";
+import { VoiceSelector } from "@/features/text-to-speech/components/voices/voice-selector";
 
 export function SettingsPanelSettings() {
   const form = useTypedAppFormContext(ttsFormOptions);

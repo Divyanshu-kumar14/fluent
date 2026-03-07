@@ -1,5 +1,6 @@
 import { History } from "lucide-react";
 
+
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -9,9 +10,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
-import { 
-  SettingsPanelHistory
-} from "./settings-panel-history";
+import { SettingsPanelHistory } from "./settings/settings-panel-history";
 
 export function HistoryDrawer() {
   return (

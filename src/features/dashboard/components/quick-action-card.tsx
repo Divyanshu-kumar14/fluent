@@ -9,8 +9,8 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import type { QuickAction } from "@/features/dashboard/data/quick-actions";
+import { IconMap } from "@/features/dashboard/components/quick-actions-icons";
 import { cn } from "@/lib/utils";
 
 type QuickActionCardProps = QuickAction;
@@ -18,46 +18,47 @@ type QuickActionCardProps = QuickAction;
 export function QuickActionCard({
   title,
   description,
-  gradient,
+  iconName,
+  iconColorClass,
+  hoverBorderClass,
   href,
 }: QuickActionCardProps) {
+  const Icon = IconMap[iconName] || ArrowRight; // Fallback icon
+
   return (
-    <div className="flex gap-4 rounded-xl border bg-card p-3">
-      {/* Gradient thumbnail with decorative elements */}
+    <Link
+      href={href}
+      className={cn(
+        "group relative flex flex-col gap-4 overflow-hidden rounded-xl border bg-card p-5 transition-all duration-300",
+        "hover:-translate-y-1 hover:bg-accent/50",
+        hoverBorderClass
+      )}
+    >
+      {/* Icon Container */}
       <div
         className={cn(
-          "relative h-31 w-41 shrink-0 overflow-hidden rounded-xl bg-linear-to-br",
-          gradient,
+          "flex size-12 items-center justify-center rounded-lg transition-transform duration-300 group-hover:scale-110",
+          iconColorClass
         )}
       >
-        {/* Centered circle */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="size-12 rounded-full bg-white/30" />
-        </div>
-        {/* Inner border ring */}
-        <div className="absolute inset-2 rounded-lg ring-2 ring-inset ring-white/20" />
+        <Icon className="size-6" />
       </div>
 
-      {/* Text content and CTA */}
-      <div className="flex flex-col justify-between py-1">
-        <div className="space-y-1">
-          <h3 className="text-sm font-medium">{title}</h3>
-          <p className="text-xs text-muted-foreground leading-relaxed">
+      {/* Text content */}
+      <div className="flex flex-1 flex-col justify-between gap-4">
+        <div className="space-y-1.5">
+          <h3 className="font-semibold text-foreground tracking-tight">{title}</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
             {description}
           </p>
         </div>
-        <Button 
-          variant="outline" 
-          size="xs" 
-          className="w-fit" 
-          asChild
-        >
-          <Link href={href}>
-            Try now
-            <ArrowRight className="size-3" />
-          </Link>
-        </Button>
+        
+        {/* Footer CTA */}
+        <div className="mt-auto flex items-center text-sm font-medium text-muted-foreground transition-colors group-hover:text-foreground">
+          Try now
+          <ArrowRight className="ml-1 size-4 transition-transform duration-300 group-hover:translate-x-1" />
+        </div>
       </div>
-    </div>
-  )
+    </Link>
+  );
 };

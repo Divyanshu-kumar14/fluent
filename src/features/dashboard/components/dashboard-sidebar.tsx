@@ -147,7 +147,7 @@ export function DashboardSidebar() {
     },
     {
       title: "Help and support",
-      url: "/",
+      url: "/support",
       icon: Headphones,
     },
   ];
@@ -158,7 +158,7 @@ export function DashboardSidebar() {
       open={voiceDialogOpen}
       onOpenChange={setVoiceDialogOpen}
     /> */}
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" className="fade-on-focus">
       {/* ── Header: logo + org switcher ── */}
       <SidebarHeader className="flex flex-col gap-4 pt-4">
         <div 
