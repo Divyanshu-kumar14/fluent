@@ -10,7 +10,7 @@
  * All procedures require an active Clerk organisation (orgProcedure).
  */
 
-// import * as Sentry from "@sentry/nextjs";
+import * as Sentry from "@sentry/nextjs";
 import { z } from "zod";
 // import { polar } from "@/lib/polar";
 import { TRPCError } from "@trpc/server";
@@ -87,6 +87,7 @@ export const generationsRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
+
       // ── (Disabled) Subscription check ──
       //   try {
       //     const customerState = await polar.customers.getStateExternal({
@@ -110,6 +111,7 @@ export const generationsRouter = createTRPCRouter({
       //   }
 
       // Step 1: Validate voice exists and is accessible (SYSTEM or own CUSTOM)
+
       const voice = await prisma.voice.findUnique({
         where: {
           id: input.voiceId,
@@ -153,11 +155,14 @@ export const generationsRouter = createTRPCRouter({
         parseAs: "arrayBuffer",
       });
 
-      //   Sentry.logger.info("Generation started", {
-      //     orgId: ctx.orgId,
-      //     voiceId: input.voiceId,
-      //     textLength: input.text.length,
-      //   });
+      Sentry.captureMessage("Generation started", {
+        level: "info",
+        extra: {
+          orgId: ctx.orgId,
+          voiceId: input.voiceId,
+          textLength: input.text.length,
+        },
+      });
 
       if (error) {
         throw new TRPCError({
@@ -213,10 +218,13 @@ export const generationsRouter = createTRPCRouter({
           },
         });
 
-        // Sentry.logger.info("Audio generated", {
-        //   orgId: ctx.orgId,
-        //   generationId: generation.id,
-        // });
+        Sentry.captureMessage("Audio generated", {
+          level: "info",
+          extra: {
+            orgId: ctx.orgId,
+            generationId: generation.id,
+          },
+        });
       } catch {
         // Rollback: delete the orphaned generation record if R2 upload failed
         if (generationId) {
@@ -229,10 +237,12 @@ export const generationsRouter = createTRPCRouter({
             .catch(() => {});
         }
 
-        // Sentry.logger.error("Generation failed", {
-        //   orgId: ctx.orgId,
-        //   voiceId: input.voiceId,
-        // });
+        Sentry.captureException(new Error("Generation failed"), {
+          extra: {
+            orgId: ctx.orgId,
+            voiceId: input.voiceId,
+          },
+        });
 
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
