@@ -13,10 +13,12 @@
 
 import { useStore } from "@tanstack/react-form";
 import { Coins } from "lucide-react";
+import { useEffect } from "react";
+import { useFocusModeStore } from "@/features/text-to-speech/stores/focus-mode-store";
 
-import { SettingsDrawer } from "./settings-drawer";
+import { SettingsDrawer } from "./settings/settings-drawer";
 import { HistoryDrawer } from "./history-drawer";
-import { VoiceSelectorButton } from "./voice-selector-button";
+import { VoiceSelectorButton } from "./voices/voice-selector-button";
 import { PromptSuggestions } from "./prompt-suggestions";
 
 import { Badge } from "@/components/ui/badge";
@@ -43,17 +45,43 @@ export function TextInputPanel() {
     const isSubmitting = useStore(form.store, (s) => s.isSubmitting);
     const isValid = useStore(form.store, (s) => s.isValid); 
     
+    // Focus Mode state
+    const isFocusMode = useFocusModeStore((s) => s.isFocusMode);
+    const setFocusMode = useFocusModeStore((s) => s.setFocusMode);
+
+    useEffect(() => {
+        if (isFocusMode) {
+            document.body.setAttribute("data-focus-mode", "true");
+        } else {
+            document.body.removeAttribute("data-focus-mode");
+        }
+    }, [isFocusMode]);
+    
     return (
         <div className="flex h-full min-h-0 flex-col flex-1">
             {/* Text Input Area — absolutely positioned to fill the flex container */}
-            <div className="relative min-h-0 flex-1">
+            <div 
+                 className="relative min-h-0 flex-1"
+                 onMouseLeave={() => setFocusMode(false)}
+            >
                 <form.Field name="text">
                     {(field) => (
                 <Textarea
                     value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
+                    onChange={(e) => {
+                        field.handleChange(e.target.value);
+                        setFocusMode(true);
+                    }}
+                    onFocus={() => {
+                        if (field.state.value.trim().length > 0) {
+                            setFocusMode(true);
+                        }
+                    }}
+                    onBlur={() => setFocusMode(false)}
                     placeholder="Start typing or paste your text here..."
-                    className="absolute inset-0 resize-none border-0 bg-transparent p-4 pb-6 lg:p-6 lg:pb-8 text-base! leading-relaxed tracking-tight shadow-none wrap-break-word focus-visible:ring-0"
+                    className={`absolute inset-0 resize-none border-0 bg-transparent p-4 pb-6 lg:p-6 lg:pb-8 text-base! leading-relaxed tracking-tight shadow-none wrap-break-word focus-visible:ring-0 transition-all duration-500 ease-in-out ${
+                        isFocusMode ? "text-2xl! lg:text-3xl! pt-24 lg:pt-32 text-center" : ""
+                    }`}
                     maxLength={TEXT_MAX_LENGTH}
                     disabled={isSubmitting}
                 />
@@ -65,14 +93,24 @@ export function TextInputPanel() {
             </div>
 
             {/* Action bar */}
-            <div className="shrink-0 p-4 lg:p-6">
+            <div className="shrink-0 p-4 lg:p-6 fade-on-focus">
                 {/* Mobile layout: full-width generate button */}
                 <div className="flex flex-col gap-3 lg:hidden">
-                    <div className="flex items-center gap-2">
-                        <SettingsDrawer >
-                            <VoiceSelectorButton />
-                        </SettingsDrawer>
-                        <HistoryDrawer />
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <SettingsDrawer >
+                                <VoiceSelectorButton />
+                            </SettingsDrawer>
+                            <HistoryDrawer />
+                        </div>
+                        {text.length > 0 && (
+                            <p className={`text-xs tracking-tight ${text.length > TEXT_MAX_LENGTH ? 'text-destructive' : ''}`}>
+                                {text.length.toLocaleString()}
+                                <span className="text-muted-foreground">
+                                    &nbsp;/&nbsp;{TEXT_MAX_LENGTH.toLocaleString()}
+                                </span>
+                            </p>
+                        )}
                     </div>
                     <GenerateButton 
                         className="w-full"

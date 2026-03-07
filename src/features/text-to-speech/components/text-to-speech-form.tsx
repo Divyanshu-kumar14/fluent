@@ -23,9 +23,11 @@ import { useTRPC } from "@/trpc/client";
 import { useAppForm } from "@/hooks/use-app-form";
 // import { useCheckout } from "@/features/billing/hooks/use-checkout";
 
+import { TEXT_MAX_LENGTH } from "@/features/text-to-speech/data/constants";
+
 /** Zod schema for TTS form validation. */
 const ttsFormSchema = z.object({
-  text: z.string().min(1, "Please enter some text"),
+  text: z.string().min(1, "Please enter some text").max(TEXT_MAX_LENGTH, "Text must be 1000 characters or less"),
   voiceId: z.string().min(1, "Please select a voice"),
   temperature: z.number(),
   topP: z.number(),

@@ -17,10 +17,7 @@ export function QuickActionsPanel() {
         {quickActions.map((action) => (
           <QuickActionCard
             key={action.title}
-            title={action.title}
-            description={action.description}
-            gradient={action.gradient}
-            href={action.href}
+            {...action}
           />
         ))}
       </div>

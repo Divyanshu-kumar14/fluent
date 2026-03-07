@@ -28,16 +28,7 @@ interface UseWaveSurferOptions {
   onError?: (error: Error) => void;
 }
 
-interface UseWaveSurferReturn {
-  containerRef: React.RefObject<HTMLDivElement | null>;
-  isPlaying: boolean;
-  isReady: boolean;
-  currentTime: number;
-  duration: number;
-  togglePlayPause: () => void;
-  seekForward: (seconds?: number) => void;
-  seekBackward: (seconds?: number) => void;
-};
+
 
 export function useWaveSurfer({
   url,
@@ -77,13 +68,13 @@ export function useWaveSurfer({
     // Create a new WaveSurfer instance with styling that matches the app theme
     const ws = WaveSurfer.create({
       container: containerRef.current,
-      waveColor: "#96999D",     // matches --muted-foreground
-      progressColor: "#4A8A9A", // matches --chart-1 (teal-cyan)
-      cursorColor: "#4A8A9A",
+      waveColor: "rgba(255, 69, 0, 0.4)",
+      progressColor: "#ff4500",
+      cursorColor: "#ff4500",
       cursorWidth: 2,
-      barWidth: 2,
-      barGap: 2,
-      barRadius: 2,
+      barWidth: 3,
+      barGap: 3,
+      barRadius: 3,
       barMinHeight: 4,
       height: "auto",
       normalize: true,

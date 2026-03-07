@@ -19,15 +19,15 @@ import { useSuspenseQueries } from "@tanstack/react-query";
 
 import { useTRPC } from "@/trpc/client";
 import { TextInputPanel } from "@/features/text-to-speech/components/text-input-panel";
-import { SettingsPanel } from "@/features/text-to-speech/components/settings-panel";
+import { SettingsPanel } from "../components/settings/settings-panel";
 import {
   TextToSpeechForm,
   type TTSFormValues
 } from "@/features/text-to-speech/components/text-to-speech-form";
 import { TTSVoicesProvider } from "../contexts/tts-voices-context";
 // import { VoicePreviewPlaceholder } from "../components/voice-preview-placeholder";
-import { VoicePreviewPanel } from "../components/voice-preview-panel";
-import { VoicePreviewMobile } from "../components/voice-preview-mobile";
+import { VoicePreviewPanel } from "../components/voices/voice-preview-panel";
+import { VoicePreviewMobile } from "../components/voices/voice-preview-mobile";
 
 export function TextToSpeechDetailView({
   generationId,

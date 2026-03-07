@@ -10,7 +10,7 @@
  * Download an audio file via a temporary <a> element.
  * Creates a safe filename from the first 50 characters of the text.
  */
-export function downloadAudioFile(audioUrl: string, text: string): void {
+export async function downloadAudioFile(audioUrl: string, text: string): Promise<void> {
   const safeName =
     text
       .slice(0, 50)
@@ -19,10 +19,20 @@ export function downloadAudioFile(audioUrl: string, text: string): void {
       .replace(/^-|-$/g, "")
       .toLowerCase() || "speech";
 
-  const link = document.createElement("a");
-  link.href = audioUrl;
-  link.download = `${safeName}.wav`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  try {
+    const response = await fetch(audioUrl);
+    if (!response.ok) throw new Error("Failed to fetch audio");
+    const blob = await response.blob();
+    const objectUrl = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = `${safeName}.wav`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(objectUrl);
+  } catch (error) {
+    console.error("Download failed:", error);
+  }
 }

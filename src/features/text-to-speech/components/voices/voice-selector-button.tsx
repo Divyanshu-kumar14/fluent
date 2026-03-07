@@ -5,11 +5,11 @@ import { useStore } from "@tanstack/react-form";
 
 import { Button } from "@/components/ui/button";
 import { DrawerTrigger } from "@/components/ui/drawer";
-import { VoiceAvatar } from "@/components/voice-avatar/voice-avatar";
+import { VoiceAvatar } from "@/features/voices/components/voice-avatar/voice-avatar";
 import { useTypedAppFormContext } from "@/hooks/use-app-form";
 
-import { useTTSVoices } from "../contexts/tts-voices-context";
-import { ttsFormOptions } from "./text-to-speech-form";
+import { useTTSVoices } from "../../contexts/tts-voices-context";
+import { ttsFormOptions } from "../text-to-speech-form";
 
 export function VoiceSelectorButton() {
   const { allVoices } = useTTSVoices();

@@ -54,10 +54,10 @@ function ComboboxClear({ className, ...props }: ComboboxPrimitive.Clear.Props) {
 
 function ComboboxInput({
   className,
-  children,
   disabled = false,
   showTrigger = true,
   showClear = false,
+  children,
   ...props
 }: ComboboxPrimitive.Input.Props & {
   showTrigger?: boolean
@@ -274,7 +274,6 @@ function ComboboxChip({
 
 function ComboboxChipsInput({
   className,
-  children,
   ...props
 }: ComboboxPrimitive.Input.Props) {
   return (

@@ -11,6 +11,7 @@ import { Headphones, ThumbsUp } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 export function DashboardHeader() {
   const { isLoaded, user } = useUser();
@@ -30,6 +31,7 @@ export function DashboardHeader() {
 
       {/* Action buttons — hidden on mobile */}
       <div className="lg:flex items-center gap-3 hidden">
+        <ThemeToggle />
         <Button variant="outline" size="sm" asChild>
           <Link href="/">
             <ThumbsUp />

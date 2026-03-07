@@ -8,6 +8,7 @@
  *   - `orgProcedure`: requires both a signed-in user AND an active org.
  */
 
+import * as Sentry from "@sentry/node";
 import { initTRPC } from '@trpc/server';
 import { TRPCError } from '@trpc/server';
 import { cache } from 'react';
@@ -28,16 +29,22 @@ const t = initTRPC.create({
   transformer: superjson,
 });
 
+const sentryMiddleware = t.middleware(
+  Sentry.trpcMiddleware({
+    attachRpcInput: true,
+  }),
+);
+
 // ── Exported helpers ───────────────────────────────────
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
-export const baseProcedure = t.procedure;
+export const baseProcedure = t.procedure.use(sentryMiddleware);
 
 /**
  * Auth-protected procedure.
  * Injects `ctx.userId` after verifying the Clerk session.
  */
-export const authProcedure = t.procedure.use(async ({ next }) => {
+export const authProcedure = baseProcedure.use(async ({ next }) => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -56,13 +63,13 @@ export const authProcedure = t.procedure.use(async ({ next }) => {
  * Extends authProcedure — also requires an active Clerk organisation.
  * Injects both `ctx.userId` and `ctx.orgId`.
  */
-export const orgProcedure = authProcedure.use(async ({ next, ctx }) => {
+export const orgProcedure = baseProcedure.use(async ({ next, ctx }) => {
   const { orgId } = await auth();
 
   if (!orgId) {
     throw new TRPCError({ 
       code: 'FORBIDDEN',
-      message: "Organisation required!",
+      message: "UNAUTHORIZED",
     });
   }
 

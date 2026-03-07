@@ -17,12 +17,13 @@ import { Pause, Play, Download, Redo, Undo } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { VoiceAvatar } from "@/components/voice-avatar/voice-avatar";
+import { VoiceAvatar } from "@/features/voices/components/voice-avatar/voice-avatar";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
-import { useWaveSurfer } from "../hooks/use-wavesurfer";
-import { downloadAudioFile } from "../utils/download-audio";
+
+import { useWaveSurfer } from "../../hooks/use-wavesurfer";
+import { downloadAudioFile } from "../../utils/download-audio";
 
 type VoicePreviewPanelVoice = {
   id?: string;
@@ -65,10 +66,10 @@ export function VoicePreviewPanel({
   });
 
   /** Download the audio file with a sanitised filename derived from the text. */
-  const handleDownload = () => {
+  const handleDownload = async () => {
     setIsDownloading(true);
-    downloadAudioFile(audioUrl, text);
-    setTimeout(() => setIsDownloading(false), 1000);
+    await downloadAudioFile(audioUrl, text);
+    setIsDownloading(false);
   };
 
   return (
@@ -94,8 +95,9 @@ export function VoicePreviewPanel({
         <div
           ref={containerRef}
           className={cn(
-            "w-full cursor-pointer transition-opacity duration-200",
-            !isReady && "opacity-0",
+            "w-full cursor-pointer transition-all duration-300",
+            !isReady ? "opacity-0" : "opacity-100",
+            isPlaying ? "drop-shadow-[0_0_15px_rgba(255,69,0,0.6)]" : "drop-shadow-none"
           )}
         />
       </div>
@@ -150,6 +152,7 @@ export function VoicePreviewPanel({
               size="icon-lg"
               className="rounded-full"
               onClick={togglePlayPause}
+              disabled={!isReady}
             >
               {isPlaying ? (
                 <Pause className="fill-background" />
